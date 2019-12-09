@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'Scoreboard.dart';
+
 void main() => runApp(MatchDay());
 
 class MatchDay extends StatefulWidget {
@@ -13,54 +15,18 @@ class MatchDay extends StatefulWidget {
   }
 }
 
+
+
 class MyApp extends State<MatchDay> {
-  var team = [0, 0];
   var team1 = 0;
   var team2 = 0;
+  Scoreboard scoreboard = new Scoreboard();
 
   void updateNumbers(){
     setState(() {
-      team1 = team[0];
-      team2 = team[1];
+      team1 = scoreboard.team[0];
+      team2 = scoreboard.team[1];
     });
-  }
-
-  void resetPoints(){
-    team[0]=0;
-    team[1]=0;
-    updateNumbers();
-  }
-
-  void subtractNumbers(int teamIndex) {
-    if(overzero(team[teamIndex])){
-      team[teamIndex] --;
-      updateNumbers();
-    }
-  }
-
-  void addNumbers(int teamIndex) {
-    if(underNinetyNine(team[teamIndex])){
-      team[teamIndex] ++;
-      updateNumbers();
-    }
-  }
-
-  bool underNinetyNine(var team) {
-    if(team<99){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  bool overzero(var team) {
-    if(team >0){
-      return true;
-    }
-    else{
-      return false;
-    }
   }
 
   @override
@@ -85,7 +51,10 @@ class MyApp extends State<MatchDay> {
                         color: Colors.grey[800],
                         padding: const EdgeInsets.all(10.10),
                         disabledColor: Colors.green,
-                        onPressed: resetPoints,
+                        onPressed: () {
+                          scoreboard.resetPoints();
+                          updateNumbers();
+                        },
                         textColor: Colors.black,
                         disabledTextColor: Colors.black,
                         child: Text("Reset"),
@@ -114,7 +83,10 @@ class MyApp extends State<MatchDay> {
                         padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
                         color: Colors.green,
                         disabledColor: Colors.green,
-                        onPressed: () => addNumbers(0),
+                        onPressed: () {
+                          scoreboard.addNumbers(0);
+                          updateNumbers();
+                        },
                         textColor: Colors.black,
                         disabledTextColor: Colors.black,
                         child: Text("Team 1"),
@@ -128,7 +100,10 @@ class MyApp extends State<MatchDay> {
                         padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
                         color: Colors.green,
                         disabledColor: Colors.green,
-                        onPressed: () => addNumbers(1),
+                        onPressed: () {
+                          scoreboard.addNumbers(1);
+                          updateNumbers();
+                        },
                         textColor: Colors.black,
                         disabledTextColor: Colors.black,
                         child: Text("Team 2"),
@@ -149,7 +124,10 @@ class MyApp extends State<MatchDay> {
                   Expanded(
                       child: new RaisedButton(
                         padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
-                        onPressed: () => subtractNumbers(0),
+                        onPressed: () {
+                          scoreboard.subtractNumbers(0);
+                          updateNumbers();
+                        },
                         color: Colors.red[900],
                         disabledColor: Colors.red[900],
                         textColor: Colors.black,
@@ -163,7 +141,10 @@ class MyApp extends State<MatchDay> {
                   Expanded(
                       child: new RaisedButton(
                         padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
-                        onPressed: () => subtractNumbers(1),
+                        onPressed: () {
+                          scoreboard.subtractNumbers(1);
+                          updateNumbers();
+                        },
                         color: Colors.red[900],
                         disabledColor: Colors.red[900],
                         textColor: Colors.black,
