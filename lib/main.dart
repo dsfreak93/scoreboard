@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:scoreboard_app/Constants.dart';
 
 import 'Scoreboard.dart';
 
@@ -20,6 +21,7 @@ class MatchDay extends StatefulWidget {
 class MyApp extends State<MatchDay> {
   var team1 = 0;
   var team2 = 0;
+  var gameRunning = "stopped";
   Scoreboard scoreboard = new Scoreboard();
 
   void updateNumbers(){
@@ -29,6 +31,39 @@ class MyApp extends State<MatchDay> {
     });
   }
 
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void choiceAction(String choice){
+    if(choice == Constants.Start){
+      gameRunning = "running";
+    }
+    else if(choice == Constants.Stop){
+      _showDialog();
+      gameRunning = "stopped";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,6 +71,19 @@ class MyApp extends State<MatchDay> {
       home: Scaffold(
         backgroundColor: Colors.grey[800],
         appBar: AppBar(
+          actions: <Widget>[
+            PopupMenuButton<String>(
+            onSelected: choiceAction,
+            itemBuilder: (BuildContext context){
+              return Constants.Choices.map((String choice){
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            )
+          ],
           backgroundColor: Colors.green,
           title: Text('Spielstandsapp'),
           centerTitle: true,
