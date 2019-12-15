@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:scoreboard_app/Constants.dart';
+import 'package:scoreboard_app/States.dart';
 
 import 'Scoreboard.dart';
 
@@ -21,7 +21,7 @@ class MatchDay extends StatefulWidget {
 class MyApp extends State<MatchDay> {
   var team1 = 0;
   var team2 = 0;
-  var gameRunning = "stopped";
+  var gameRunning = States.stateMessage(States.Start);
   Scoreboard scoreboard = new Scoreboard();
 
   void updateNumbers(){
@@ -35,6 +35,7 @@ class MyApp extends State<MatchDay> {
     // flutter defined function
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
@@ -55,13 +56,24 @@ class MyApp extends State<MatchDay> {
   }
 
   void choiceAction(String choice){
-    if(choice == Constants.Start){
-      gameRunning = "running";
-    }
-    else if(choice == Constants.Stop){
-      _showDialog();
-      gameRunning = "stopped";
-    }
+    setState(() {
+      gameRunning = States.stateMessage(choice);
+    });
+//    if(choice == Constants.Start){
+//      setState(() {
+//        gameRunning = "running";
+//      });
+//    }
+//    else if(choice == Constants.Stop){
+//      _showDialog();
+//      setState(() {
+//        gameRunning = "stopped";
+//      });
+//    }
+  }
+
+  void setGame(String choic){
+
   }
 
   @override
@@ -75,10 +87,10 @@ class MyApp extends State<MatchDay> {
             PopupMenuButton<String>(
             onSelected: choiceAction,
             itemBuilder: (BuildContext context){
-              return Constants.Choices.map((String choice){
+              return States.GameStates.map((String state){
                 return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
+                  value: state,
+                  child: Text(state),
                 );
               }).toList();
             },
@@ -92,6 +104,19 @@ class MyApp extends State<MatchDay> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: new Text('$gameRunning',
+                      textAlign: TextAlign.center,
+                      style: new TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: <Widget>[
                   Expanded(
